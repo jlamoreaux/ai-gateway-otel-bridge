@@ -3,7 +3,7 @@ import { chmodSync, existsSync, mkdirSync, readFileSync, rmSync } from "node:fs"
 import { resolve } from "node:path";
 
 export const ROOT = resolve(import.meta.dirname, "..");
-export const IMAGE = "otel/opentelemetry-collector-contrib:0.116.1";
+export const IMAGE = "otel/opentelemetry-collector-contrib:0.164.0";
 
 export interface CollectorOptions {
   profile: string;

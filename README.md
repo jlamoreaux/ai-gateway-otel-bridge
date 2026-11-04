@@ -147,6 +147,11 @@ overlay.
 - Spans contain full prompts and completions. Treat the collector, its logs, and the capture
   files as sensitive. Don't use the `capture`/`normalized` profiles in production.
 
+## Supported versions
+
+- **Node.js** (CLI and tests only; the collector does not use Node): 22.23.4+, 24.22.2+ or 26.13.0+. These are the minimum patch levels with the October 2026 security fixes. End-of-life lines (23, 25) are not supported. A further security release is announced for 2026-11-11; bump the floors in `package.json` after it ships. `.nvmrc` and CI use the current LTS (26).
+- **OpenTelemetry Collector**: pinned to `otel/opentelemetry-collector-contrib:0.164.0` in `docker-compose.yaml` and `test/helpers.ts`. Dependabot proposes bumps weekly and CI re-runs the tests against them.
+
 ## License
 
 Apache-2.0. See [LICENSE](LICENSE).

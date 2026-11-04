@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=22.18"
+    "node": "^22.23.4 || ^24.22.2 || >=26.13.0"
   },
   "scripts": {
     "test": "node --test \"test/*.test.ts\"",
@@ -13,7 +13,7 @@
     "gateway": "node src/cli.ts"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
+    "@types/node": "^26.0.0",
     "typescript": "^5.6.0"
   },
   "license": "Apache-2.0",

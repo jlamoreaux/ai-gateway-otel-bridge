@@ -11,10 +11,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 26
           cache: npm
       - run: npm ci
+      - run: npm audit
       - run: npm run typecheck
       - name: Pre-pull collector image
-        run: docker pull otel/opentelemetry-collector-contrib:0.116.1
+        run: docker pull otel/opentelemetry-collector-contrib:0.164.0
       - run: npm test
