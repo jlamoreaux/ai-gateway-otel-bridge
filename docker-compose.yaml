@@ -1,0 +1,29 @@
+services:
+  collector:
+    image: otel/opentelemetry-collector-contrib:0.116.1
+    command:
+      - --config=/etc/otelcol/base.yaml
+      - --config=/etc/otelcol/profiles/${PROFILE:-capture}.yaml
+      - --config=/etc/otelcol/overlays/${OVERLAY:-none}.yaml
+      - --config=/etc/otelcol/overlays/${OVERLAY_2:-none}.yaml
+    environment:
+      - LANGSMITH_API_KEY
+      - LANGSMITH_PROJECT
+      - LANGSMITH_OTLP_TRACES_ENDPOINT
+      - OTLP_TRACES_ENDPOINT
+      - OTLP_AUTHORIZATION
+      - INGEST_TOKEN
+    volumes:
+      - ./collector:/etc/otelcol:ro
+      - ./captures:/captures
+    ports:
+      - "4318:4318"
+
+  # Outbound-only quick tunnel for local testing. For anything real, use a named
+  # tunnel + Access service token (see deploy/).
+  quick-tunnel:
+    profiles: ["tunnel"]
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate --url http://collector:4318
+    depends_on:
+      - collector

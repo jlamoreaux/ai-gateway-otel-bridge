@@ -1,0 +1,19 @@
+# Generic OTLP/HTTP destination: forwards normalized spans (standard gen_ai.*
+# attributes) to any backend that speaks OTLP - Langfuse, Phoenix, Braintrust,
+# Honeycomb, Grafana, etc.
+#
+# Env:
+#   OTLP_TRACES_ENDPOINT   full traces URL, e.g. https://api.honeycomb.io/v1/traces
+#   OTLP_AUTHORIZATION     value for the Authorization header (optional)
+exporters:
+  otlphttp/generic:
+    traces_endpoint: ${env:OTLP_TRACES_ENDPOINT}
+    headers:
+      Authorization: ${env:OTLP_AUTHORIZATION:-}
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [transform/normalize, batch]
+      exporters: [otlphttp/generic]

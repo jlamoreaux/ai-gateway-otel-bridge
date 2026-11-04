@@ -1,0 +1,5 @@
+# Intentionally empty overlay (placeholder so compose can always pass two overlays).
+service:
+  telemetry:
+    logs:
+      level: info

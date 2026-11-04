@@ -1,0 +1,14 @@
+# Same as `capture` but AFTER normalization. Handy for debugging transforms.
+exporters:
+  debug:
+    verbosity: detailed
+  file/normalized:
+    path: /captures/normalized.jsonl
+    flush_interval: 1s
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [transform/normalize, batch]
+      exporters: [debug, file/normalized]

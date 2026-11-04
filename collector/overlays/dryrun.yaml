@@ -1,0 +1,11 @@
+# Overlay for tests / local debugging: keep a profile's processors but swap its
+# exporter for a local file, so no real backend is contacted.
+exporters:
+  file/dryrun:
+    path: /captures/dryrun.jsonl
+    flush_interval: 1s
+
+service:
+  pipelines:
+    traces:
+      exporters: [file/dryrun]

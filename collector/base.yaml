@@ -1,0 +1,36 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 2s
+
+  # AI Gateway puts the *entire* request/response bodies into
+  # gen_ai.input.messages / gen_ai.output.messages. Most backends expect message
+  # arrays there, so unwrap them. If a body is not OpenAI-shaped (or parsing
+  # fails) the original value is left untouched (error_mode: ignore).
+  transform/normalize:
+    error_mode: ignore
+    trace_statements:
+      - context: span
+        conditions:
+          - name == "cf.aig.request"
+        statements:
+          - set(cache["req"], attributes["gen_ai.input.messages"])
+          - set(cache["res"], attributes["gen_ai.output.messages"])
+          - set(attributes["gen_ai.input.messages"], String(ParseJSON(cache["req"])["messages"])) where IsMatch(cache["req"], "\"messages\"")
+          - set(attributes["gen_ai.output.messages"], Concat(["[", String(ParseJSON(cache["res"])["choices"][0]["message"]), "]"], "")) where IsMatch(cache["res"], "\"choices\"")
+          - set(attributes["gen_ai.system"], attributes["gen_ai.provider.name"]) where attributes["gen_ai.provider.name"] != nil
+
+service:
+  telemetry:
+    logs:
+      level: info
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [transform/normalize, batch]
+      exporters: [debug]

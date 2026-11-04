@@ -1,0 +1,42 @@
+# LangSmith (SaaS or self-hosted) destination.
+#
+# Env:
+#   LANGSMITH_API_KEY                 (required)
+#   LANGSMITH_PROJECT                 (default: ai-gateway)
+#   LANGSMITH_OTLP_TRACES_ENDPOINT    SaaS:        https://api.smith.langchain.com/otel/v1/traces
+#                                     self-hosted: https://<host>/api/v1/otel/v1/traces
+processors:
+  transform/langsmith:
+    error_mode: ignore
+    trace_statements:
+      - context: span
+        conditions:
+          - name == "cf.aig.request"
+        statements:
+          - set(attributes["langsmith.span.kind"], "llm")
+          - set(attributes["langsmith.trace.name"], Concat(["AI Gateway - ", attributes["gen_ai.request.model"]], "")) where attributes["gen_ai.request.model"] != nil
+          - set(attributes["langsmith.metadata.aig_cost"], attributes["gen_ai.usage.cost"]) where attributes["gen_ai.usage.cost"] != nil
+          # Everything that is not gen_ai.* / langsmith.* is user metadata
+          # (cf-aig-metadata). Re-home it under langsmith.metadata.* so it shows
+          # up as run metadata.
+          - set(cache["keep"], attributes)
+          - keep_matching_keys(cache["keep"], "^(gen_ai|langsmith)\\.")
+          - set(cache["meta"], attributes)
+          - delete_matching_keys(cache["meta"], "^(gen_ai|langsmith)\\.")
+          - replace_all_patterns(cache["meta"], "key", "^(.+)$", "langsmith.metadata.$$1")
+          - set(attributes, cache["keep"])
+          - merge_maps(attributes, cache["meta"], "upsert")
+
+exporters:
+  otlphttp/langsmith:
+    traces_endpoint: ${env:LANGSMITH_OTLP_TRACES_ENDPOINT:-https://api.smith.langchain.com/otel/v1/traces}
+    headers:
+      x-api-key: ${env:LANGSMITH_API_KEY}
+      Langsmith-Project: ${env:LANGSMITH_PROJECT:-ai-gateway}
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [transform/normalize, transform/langsmith, batch]
+      exporters: [otlphttp/langsmith]

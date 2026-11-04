@@ -1,0 +1,16 @@
+# Require `Authorization: Bearer <INGEST_TOKEN>` on the OTLP receiver.
+# Set the same header in the AI Gateway exporter's `headers`.
+# Use this when the collector is reachable without Cloudflare Access in front.
+extensions:
+  bearertokenauth/ingest:
+    token: ${env:INGEST_TOKEN}
+
+receivers:
+  otlp:
+    protocols:
+      http:
+        auth:
+          authenticator: bearertokenauth/ingest
+
+service:
+  extensions: [bearertokenauth/ingest]

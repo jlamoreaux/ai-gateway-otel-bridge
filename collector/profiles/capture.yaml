@@ -1,0 +1,15 @@
+# Dump spans exactly as received (no normalization) - useful for inspecting
+# what AI Gateway really sends and for refreshing test fixtures.
+exporters:
+  debug:
+    verbosity: detailed
+  file/capture:
+    path: /captures/spans.jsonl
+    flush_interval: 1s
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug, file/capture]

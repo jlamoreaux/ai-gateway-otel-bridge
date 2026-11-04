@@ -1,0 +1,97 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "ai-gateway"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "ai"
+          },
+          "spans": [
+            {
+              "traceId": "0123456789abcdef0123456789abcdef",
+              "spanId": "0123456789abcdef",
+              "parentSpanId": "",
+              "name": "cf.aig.request",
+              "kind": 1,
+              "startTimeUnixNano": "1793832666460000000",
+              "endTimeUnixNano": "1793832667670000000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "@cf/meta/llama-3.2-3b-instruct"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "workers-ai"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "41"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "8"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "{\"model\":\"workers-ai/@cf/meta/llama-3.2-3b-instruct\",\"messages\":[{\"role\":\"user\",\"content\":\"Say hello in five words.\"}]}"
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "{\"id\":\"id-1793832666670\",\"object\":\"chat.completion\",\"created\":1793832666,\"model\":\"@cf/meta/llama-3.2-3b-instruct\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"Hello, how are you today?\",\"refusal\":null,\"annotations\":null,\"audio\":null,\"function_call\":null,\"reasoning\":null},\"logprobs\":null,\"finish_reason\":\"stop\",\"stop_reason\":null,\"token_ids\":null,\"routed_experts\":null}],\"usage\":{\"prompt_tokens\":41,\"completion_tokens\":8,\"total_tokens\":49,\"prompt_tokens_details\":{\"cached_tokens\":0},\"neurons\":0.4334059953689575}}"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cost",
+                  "value": {
+                    "doubleValue": 0.000004767465949058532
+                  }
+                },
+                {
+                  "key": "user_id",
+                  "value": {
+                    "stringValue": "poc-user"
+                  }
+                },
+                {
+                  "key": "team",
+                  "value": {
+                    "stringValue": "fde"
+                  }
+                }
+              ],
+              "status": {}
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

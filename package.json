@@ -1,0 +1,24 @@
+{
+  "name": "ai-gateway-otel-bridge",
+  "version": "0.1.0",
+  "description": "Normalize Cloudflare AI Gateway OpenTelemetry spans and forward them to LangSmith (including self-hosted/private) and other backends.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "gateway": "node src/cli.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jlamoreaux/ai-gateway-otel-bridge.git"
+  }
+}

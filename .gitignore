@@ -1,0 +1,5 @@
+captures/*
+!captures/.gitkeep
+.env
+node_modules/
+.test-out/
