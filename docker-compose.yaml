@@ -1,6 +1,6 @@
 services:
   collector:
-    image: otel/opentelemetry-collector-contrib:0.164.0
+    image: otel/opentelemetry-collector-contrib:0.165.0
     command:
       - --config=/etc/otelcol/base.yaml
       - --config=/etc/otelcol/profiles/${PROFILE:-capture}.yaml
